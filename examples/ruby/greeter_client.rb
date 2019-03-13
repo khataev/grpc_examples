@@ -26,8 +26,10 @@ require 'grpc'
 require 'helloworld_services_pb'
 require 'benchmark'
 
+IP = '46.101.11.5'.freeze
+
 def main
-  stub = Helloworld::Greeter::Stub.new('server:50051', :this_channel_is_insecure)
+  stub = Helloworld::Greeter::Stub.new("#{IP}:50051", :this_channel_is_insecure)
   user = ARGV.size > 0 ?  ARGV[0] : 'world'
   message = stub.say_hello(Helloworld::HelloRequest.new(name: user)).message
   p "Greeting: #{message}"
@@ -46,7 +48,7 @@ end
 def bench
   p "Starting client"
   print_time_spent do
-    stub = Helloworld::Greeter::Stub.new('server:50051', :this_channel_is_insecure)
+    stub = Helloworld::Greeter::Stub.new("#{IP}:50051", :this_channel_is_insecure)
     times = 100_000.00
     1.upto times do |current|
       message = stub.say_hello(Helloworld::HelloRequest.new(name: 'world')).message
@@ -55,4 +57,5 @@ def bench
   end
 end
 
-bench
+main
+# bench

@@ -1,0 +1,13 @@
+FROM ruby:2.6.1
+
+RUN mkdir /app
+WORKDIR /app
+RUN echo -e "install: --no-rdoc --no-ri\nupdate:  --no-rdoc --no-ri" > $HOME/.gemrc
+ENV LC_ALL=C.UTF-8
+# COPY Gemfile /app/Gemfile
+# RUN bundle install --retry 5
+RUN gem install grpc
+RUN gem install grpc-tools
+# Remove SSH keys
+COPY . /app
+CMD ruby greeter_client.rb
